@@ -1,11 +1,25 @@
 def test_est_hr():
     from est_hr import est_hr
-    import os
+    import peakutils
     import numpy as np
     
-    # Generate Sine Wave with certain frequency and estimate "HR"
-    assert np.array_equal(data,[2,3])
+    # Simulate Data with Peaks and Noise
+    # Assume 75 bpm -> 1.25/second
+    delta_t = 0.01 # seconds
+    x = np.linspace(0, 10, 10/delta_t)
+    x_ind = np.array(range(len(x)))
+    centers = (1/delta_t,1.8/delta_t,2.6/delta_t,3.4/delta_t,4.2/delta_t,5/delta_t,5.8/delta_t,6.6/delta_t)
+    
+    tmp = np.zeros(len(x_ind))
+    for i in range(len(centers)):
+        tmp = tmp + (peakutils.gaussian(x_ind, 5, centers[i], 5))
+    ECG_data = tmp + np.random.rand(x_ind.size)
+    PP_data = tmp + np.random.rand(x_ind.size)
 
+    inst_HR = est_hr(ECG_data,PP_data,delta_t)
+    eps = 5 # Range of 5 bpm accepted for accuracy
+    assert (inst_HR>(75-eps/2) and inst_HR<(75+eps/2))
 
     # Robustness Test (handle NaN values)
-    assert np.array_equal(data_info[1],2*4)
+    #inst_HR = est_hr()
+    #assert 
