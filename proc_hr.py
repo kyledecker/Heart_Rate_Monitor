@@ -1,0 +1,39 @@
+def proc_hr(inst_HR,HR_proc_data):
+    """ Estimate HR from ECG and PP data
+
+    :param inst_HR: inst HR estimated for given time interval
+    :param HR_proc_data: numpy array of 10 minute HR data 
+    :returns: HP_proc_data, return the data with new timepoint added, oldest dropped
+    """
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import os
+
+    # Roll the data by one point and replace the first element (replacing oldest sample w/ new)
+    HR_proc_data = np.roll(HR_proc_data,1)
+    HR_proc_data[0] = inst_HR
+
+    # Check for tachycardia
+    if (inst_HR > 240):
+        print("ALARM: Subject is in state of Tachycardia with heart rate of %d bpm" % (inst_HR))
+        time_index = np.linspace(0,10,len(HR_proc_data))
+        plt.plot(time_index,HR_proc_data[::-1]) # Plot data (flip order to make sense)
+        plt.title("10 Minute Trace of Heart Rate")
+        plt.xlabel("Time (minutes)")
+        plt.ylabel("Heart Rate (BPM)")
+        plt.show(block=True)
+        os.system("echo 'An Alarm was triggered indicating tachycardia' > ALARM.txt")
+
+    # Check for bradycardia
+    if (inst_HR < 30):
+        print("ALARM: Subject is in state of Bradycardia with heart rate of %d bpm" % (inst_HR))
+        time_index = np.linspace(0,10,len(HR_proc_data))
+        plt.plot(time_index,HR_proc_data[::-1]) # Plot data (flip order to make sense)
+        plt.title("10 Minute Trace of Heart Rate")
+        plt.xlabel("Time (minutes)")
+        plt.ylabel("Heart Rate (BPM)")
+        plt.show(block=True)
+        os.system("echo 'An Alarm was triggered indicating bradycardia' > ALARM.txt")
+    
+    return(HR_proc_data)

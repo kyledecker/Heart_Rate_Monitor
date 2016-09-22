@@ -8,7 +8,7 @@ def test_read_binary():
     x = np.uint16(np.array([2,3]))
     f.write(x)
     f.close()
-    data = read_binary('tmp.bin',0,2,0)
+    data = read_binary('tmp.bin',offset=0,count_read=2,init_flag=0)
     os.system('rm tmp.bin')
     assert np.array_equal(data,[2,3])
 
@@ -18,7 +18,7 @@ def test_read_binary():
     x = np.uint16(np.array([5000,300,200,100]))
     f.write(x)
     f.close()
-    data_info = read_binary('tmp.bin',0,1,1)
+    data_info = read_binary('tmp.bin',offset=0,count_read=1,init_flag=1)
     os.system('rm tmp.bin')
     assert np.array_equal(data_info[0],[5000]) 
     assert np.array_equal(data_info[1],2*4)
