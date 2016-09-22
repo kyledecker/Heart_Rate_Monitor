@@ -6,10 +6,15 @@ of bradycardia or tachycardia an alarm will be displayed on the
 terminal and the software will return a plot of the 10 minute
 trace for inspection. 
 
+The only dependencies outside of having anaconda installed is
+a peak detection utility availabile via pip:
+
+    pip install peakutils
+
 The program can be claaed from the command line with a
 call such as:
 
-ipython heart_rate_monitor.py filename
+    ipython heart_rate_monitor.py filename
 
 in the command line call filename should be the name of the
 file containing the heart rate data (i.e. example_data.bin)
