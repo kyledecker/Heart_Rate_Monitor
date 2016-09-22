@@ -61,13 +61,13 @@ if __name__ == "__main__":
         
         if (elapsed_time<time_var):
             time.sleep(time_var-elapsed_time) # Delay required time
-            os.system("clear")
-            print("Elapsed Time: %d seconds" % int(math.down(total_elapsed_time/10))*10 ) # Round 
-            print("Current Heart Rate = %d bpm" % inst_HR)
-            if (total_elapsed_time>60):
-                print("1 Minute Average Heart Rate = %d bpm" % HR_avg_1min)
-                if (total_elapsed_time>(60*5)):
-                    print("5 Minute Average Heart Rate = %d bpm" % HR_avg_5min)
+        os.system("clear")
+        print("Elapsed Time: %d seconds" % int(math.down(total_elapsed_time/10))*10 ) # Round 
+        print("Current Heart Rate = %d bpm" % inst_HR)
+        if (total_elapsed_time>60):
+            print("1 Minute Average Heart Rate = %d bpm" % HR_avg_1min)
+            if (total_elapsed_time>(60*5)):
+                print("5 Minute Average Heart Rate = %d bpm" % HR_avg_5min)
             
 print("Reached the end of the data...")
 sys.exit()
