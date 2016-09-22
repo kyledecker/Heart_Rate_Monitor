@@ -1,11 +1,19 @@
 def test_proc_hr():
     from proc_hr import proc_hr
-    import os
     import numpy as np
-    
-    # Test Boxcar Averager for 10 minute data
-    assert np.array_equal(data,[2,3])
+    import os
+
+    # Test Boxcar Averager 
+    HR_proc_data = np.array([70,71,72,73,74])
+    inst_HR = 65
+    HR_proc_data_new = proc_hr(inst_HR,HR_proc_data)
+    assert np.array_equal(HR_proc_data_new,[65,70,71,72,73])
 
 
-    # Test case where there is not sufficient data for averages (<1min elapsed)
-    assert np.array_equal(data_info[1],2*4)
+    # Test case where Bradycardia occurs
+    HR_proc_data = np.array([70,71,72,73,74])
+    inst_HR = 15
+    HR_proc_data_new = proc_hr(inst_HR,HR_proc_data)
+    assert np.array_equal(HR_proc_data_new,[15,70,71,72,73])
+    assert (os.path.isfile('ALARM.txt')==True)
+    os.system("rm ALARM.txt")
