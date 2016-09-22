@@ -7,7 +7,8 @@ if __name__ == "__main__":
     else:
         filename = sys.argv[1]
         print('Analyzing the heart rate of data contained in: %s ...' %filename)
-
+        
+    import numpy as np
     # First attain necessary info (fs and size) from data                                                                                                                                              
     data_info = read_binary(filename,offset=0,count_read=1,init_flag=1)
     fs = data_info[0]
@@ -17,7 +18,8 @@ if __name__ == "__main__":
     time_var = 10
     num_samples = fs*time_var
     sample_size = 2*2 #2 bytes per sample assuming uint16, 2 samples (1 ECG, 1 PP)
-    
+    HR_proc_data = np.zeros(num_samples*10*60/time_var) #Preallocate 10 minute trace
+
     # Read in defined amount of time of data until end of file
     buffer = sample_size
     while (buffer<file_size):
@@ -27,14 +29,10 @@ if __name__ == "__main__":
         buffer = buffer + num_samples*sample_size
 
         # Take in defined time of ECG and PP data at a time, estimate inst. HR
-        est_hr(ECG_data,PP_data,delta_t = (1/fs))
+       inst_HR =  est_hr(ECG_data,PP_data,delta_t = (1/fs))
 
-        # Take in new inst. HR, drop old if it exists
-        # Add new inst. HR to 1 minute data, drop oldest if exists
-        # Add new inst. HR to 5 minute data, drop oldest if exists
-        # Add new inst. HR to 10 minute data, drop oldest if exists
         # Check for too high / too low heart rate
-        proc_hr()
+        HR_proc_data = proc_hr(inst_HR,HR_proc_data)
 
         # Keep track of elapsed time
         # Update inst. HR every 10 seconds
