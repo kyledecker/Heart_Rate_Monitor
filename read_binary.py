@@ -5,7 +5,8 @@ def read_binary(filename,offset,count_read,init_flag):
     :param offset: offset for reading
     :param count_read: determines how many data points to read
     :param init_flag: init_flag == 1 simply determines fs and file size
-    :returns: fs(sampling frequency), ECG data (np.array), and PP data (np.array)
+    :returns: fs(sampling frequency) and file_size (in bytes) if init_flag = 1
+    :returns: ECG and PP data (single np.array) if init_flag == 0
     """
 
     import numpy as np
