@@ -11,10 +11,10 @@ a peak detection utility availabile via pip:
 
     pip install peakutils
 
-The program can be claaed from the command line with a
+The program can be called from the command line with a
 call such as:
 
     ipython heart_rate_monitor.py filename
 
-in the command line call filename should be the name of the
+In the command line call filename should be the name of the
 file containing the heart rate data (i.e. example_data.bin)
