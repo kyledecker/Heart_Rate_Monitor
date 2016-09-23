@@ -1,4 +1,7 @@
 def test_proc_hr():
+    import os.path
+    import sys 
+    sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
     from proc_hr import proc_hr
     import numpy as np
     import os

@@ -9,14 +9,18 @@ def est_hr(ECG_data,PP_data,delta_t):
 
     import numpy as np
     import peakutils
+    from scipy import signal
+    
+    # Predefined variable
+    max_HR = 400
+    conversion = 60 # 60 seconds = 1 minute
 
     # Find the peaks using a percentile threshold and min_dist
-    pt = 20 # Define the percentile to use
-    pk_dist = (60/400)/delta_t# Define the min distance between peaks - HR will not go over 400 bpm
+    pk_dist = (conversion/max_HR)/delta_t# Define the min distance between peaks - HR will not go over 400 bpm
     signal_comb = ECG_data*PP_data
-    thresh_val = np.percentile(signal_comb,pt)
+    signal_comb.astype(int)
+    thresh_val = 0.5
     peak_ind = peakutils.indexes(signal_comb,thres=thresh_val,min_dist = pk_dist)
     peak_separation = np.diff(peak_ind) # Find separation between peak indices
-
     inst_HR = (1/(np.mean(peak_separation)*delta_t))*60 # Find Frequency and convert to bpm
     return(inst_HR)
