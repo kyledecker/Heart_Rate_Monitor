@@ -1,4 +1,7 @@
 def test_read_binary():
+    import os.path
+    import sys
+    sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
     from read_binary import read_binary
     import os
     import numpy as np

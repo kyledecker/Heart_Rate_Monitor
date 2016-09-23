@@ -1,4 +1,7 @@
 def test_est_hr():
+    import os.path
+    import sys
+    sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
     from est_hr import est_hr
     import peakutils
     import numpy as np
