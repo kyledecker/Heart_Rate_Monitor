@@ -31,9 +31,8 @@ if __name__ == "__main__":
     num_samples = fs*time_var
     sample_size = 2*num_modalities #2 bytes per sample assuming uint16, 2 samples (1 ECG, 1 PP)
     # Read in first 10 seconds so as to have sufficient data for a instant HR estimation
-    data= read_binary(filename,offset=sample_size,count_read=(num_modalities*fs*init_time),init_flag=0)
-    start_data = data[2:]
-    HR_proc_data = np.zeros(num_samples*10*conversion/time_var) #Preallocate 10 minute trace
+    start_data= read_binary(filename,offset=sample_size,count_read=(num_modalities*fs*init_time),init_flag=0)
+    HR_proc_data = np.zeros(int(num_samples*10*conversion/time_var)) #Preallocate 10 minute trace
     HR_proc_data[0:len(start_data)] = start_data
     
     ECG_data = HR_proc_data[0::2]
@@ -63,9 +62,9 @@ if __name__ == "__main__":
         # Check for too high / too low heart rate
         HR_proc_data = proc_hr(inst_HR,HR_proc_data)
         # Get 1 minute average
-        HR_avg_1min = np.mean(HR_proc_data[0:(1*conversion/time_var)])
+        HR_avg_1min = np.mean(HR_proc_data[0:int(1*conversion/time_var)])
         #Get 5 minute average
-        HR_avg_5min = np.mean(HR_proc_data[0:(5*conversion/time_var)])
+        HR_avg_5min = np.mean(HR_proc_data[0:int(5*conversion/time_var)])
         # Keep track of elapsed time
         elapsed_time = time.time() - start_time
         total_elapsed_time = total_elapsed_time + elapsed_time
