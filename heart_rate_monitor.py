@@ -18,20 +18,21 @@ if __name__ == "__main__":
         filename = sys.argv[1]
         print('Analyzing the heart rate of data contained in: %s ...' %filename)
         
-    # First attain necessary info (fs and size) from data, as well as first 10 seconds
+    # First attain necessary info (fs and size) from data
     num_modalities = 2 # ECG and PP
     init_time = 10 # 10 second initial read
     conversion = 60 # 60 seconds in 1 minute
     data_info = read_binary(filename,offset=0,count_read=1,init_flag=1)
     file_size = data_info[0]
     fs = data_info[1]
-    data_info = read_binary(filename,offset=0,count_read=(1+num_modalities*fs*init_time),init_flag=1)
-    start_data = data_info[2:]
 
     # Define Amount of time to read in at once (2 seconds)
     time_var = 2
     num_samples = fs*time_var
     sample_size = 2*num_modalities #2 bytes per sample assuming uint16, 2 samples (1 ECG, 1 PP)
+    # Read in first 10 seconds so as to have sufficient data for a instant HR estimation
+    data= read_binary(filename,offset=sample_size,count_read=(num_modalities*fs*init_time),init_flag=0)
+    start_data = data[2:]
     HR_proc_data = np.zeros(num_samples*10*conversion/time_var) #Preallocate 10 minute trace
     HR_proc_data[0:len(start_data)] = start_data
     
@@ -74,7 +75,6 @@ if __name__ == "__main__":
             total_elapsed_time = total_elapsed_time + (time_var-elapsed_time)
         os.system("clear")
         # Update Time... only want to display to nearest multiple of 10 seconds
-        #print("Elapsed Time: %d seconds" % (int(math.floor(total_elapsed_time/10)))*10 )
         time_print = (int(math.floor(total_elapsed_time/10)))*10
         print("Elapsed Time: %d seconds" % time_print )
         print("Current Heart Rate = %d bpm" % inst_HR)

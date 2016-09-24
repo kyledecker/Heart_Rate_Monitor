@@ -17,13 +17,14 @@ def read_binary(filename,offset,count_read,init_flag):
         # Read in the first number which is the frequency in Hz
         tmp = np.fromfile(f,dtype='uint16',count=count_read)
         fs = tmp[0]
-        data = tmp[1:]
         # Determine the file size in bytes (1 byte = 8 bits)
         file_size = os.path.getsize(filename)
         data_info = np.array([file_size,fs])
-        return(np.append(data_info,data))
+        return(data_info)
     else:
         f = open(filename)
         f.seek(offset,os.SEEK_SET)
         data = np.fromfile(f,dtype='uint16',count=count_read)
+        # If any Nan's are present, convert to 0
+        data = np.nan_to_num(data)
         return(data)
