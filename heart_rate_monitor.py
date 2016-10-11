@@ -13,6 +13,8 @@ def main():
     
     args = parse_cli()
     filename = args.f
+    brady_thresh = args.b
+    tachy_thresh = args.t
     print('Analyzing the heart rate of data contained in: %s ...' %filename)
         
     if not args.noshoutout:
@@ -62,7 +64,7 @@ def main():
         inst_HR =  est_hr(ECG_data,PP_data,delta_t = (1/fs))
 
         # Check for too high / too low heart rate
-        HR_proc_data = proc_hr(inst_HR,HR_proc_data)
+        HR_proc_data = proc_hr(inst_HR,HR_proc_data,brady_thresh,tachy_thresh)
         # Get 1 minute average
         HR_avg_1min = np.mean(HR_proc_data[0:int(1*conversion/time_var)])
         #Get 5 minute average

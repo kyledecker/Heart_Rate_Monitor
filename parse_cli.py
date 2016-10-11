@@ -13,7 +13,18 @@ def parse_cli():
                      help="File Name",
                      default='simulated_data.bin')
 
-    # note that type isn't specified since argparse will default to a str                                                                                                                                         
+    par.add_argument("--b",
+                     dest="b",
+                     help="Threshold for Bradycardia (BPM)",
+                     type=int,
+                     default=30)
+
+    par.add_argument("--t",
+                     dest="t",
+                     help="Threshold for Tachycardia (BPM)",
+                     type=int,
+                     default=240)
+
     par.add_argument("--shoutout",
                      dest="shoutout",
                      help="shoutout message",

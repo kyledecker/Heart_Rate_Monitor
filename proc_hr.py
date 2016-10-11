@@ -1,8 +1,10 @@
-def proc_hr(inst_HR,HR_proc_data):
+def proc_hr(inst_HR,HR_proc_data,brady_thresh,tachy_thresh):
     """ Estimate HR from ECG and PP data
 
     :param inst_HR: inst HR estimated for given time interval
-    :param HR_proc_data: numpy array of 10 minute HR data 
+    :param HR_proc_data: numpy array of 10 minute HR data
+    :param brady_thresh: Threshold for Bradycardia
+    :param tachy_thresh: Threshold for Tachycardia
     :returns: HP_proc_data, return the data with new timepoint added, oldest dropped
     """
 
@@ -16,8 +18,8 @@ def proc_hr(inst_HR,HR_proc_data):
     
     # Predefined variables
     trace_time = 10
-    tachy_limit = 240
-    brady_limit = 30
+    tachy_limit = tachy_thresh
+    brady_limit = brady_thresh
 
     # Check for tachycardia
     if (inst_HR > tachy_limit):
