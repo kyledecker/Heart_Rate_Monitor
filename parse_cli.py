@@ -31,6 +31,13 @@ def parse_cli():
                      type=int,
                      default=3)
 
+    par.add_argument("--avg",
+                     dest="a",
+                     help="Duration of multi-minute HR avergaes",
+                     type=int,
+                     nargs="+",
+                     default=[1,5])
+
 
     par.add_argument("--shoutout",
                      dest="shoutout",

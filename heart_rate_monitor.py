@@ -16,6 +16,7 @@ def main():
     brady_thresh = args.b
     tachy_thresh = args.t
     signal_choice = args.s
+    avg_times = args.a
     print('Analyzing the heart rate of data contained in: %s ...' %filename)
         
     if not args.noshoutout:
@@ -66,10 +67,10 @@ def main():
 
         # Check for too high / too low heart rate
         HR_proc_data = proc_hr(inst_HR,HR_proc_data,brady_thresh,tachy_thresh)
-        # Get 1 minute average
-        HR_avg_1min = np.mean(HR_proc_data[0:int(1*conversion/time_var)])
-        #Get 5 minute average
-        HR_avg_5min = np.mean(HR_proc_data[0:int(5*conversion/time_var)])
+        # Get 1st multi-minute average
+        HR_avg_1 = np.mean(HR_proc_data[0:int(avg_times[0]*conversion/time_var)])
+        #Get 2nd multi-minute average
+        HR_avg_2 = np.mean(HR_proc_data[0:int(avg_times[1]*conversion/time_var)])
         # Keep track of elapsed time
         elapsed_time = time.time() - start_time
         total_elapsed_time = total_elapsed_time + elapsed_time
@@ -83,9 +84,9 @@ def main():
         print("Elapsed Time: %d seconds" % time_print )
         print("Current Heart Rate = %d bpm" % inst_HR)
         if (total_elapsed_time>(1*conversion)):
-            print("1 Minute Average Heart Rate = %d bpm" % HR_avg_1min)
+            print("%d Minute Average Heart Rate = %d bpm" % (avg_times[0],HR_avg_1))
             if (total_elapsed_time>(5*conversion)):
-                print("5 Minute Average Heart Rate = %d bpm" % HR_avg_5min)
+                print("%d Minute Average Heart Rate = %d bpm" % (avg_times[1],HR_avg_2))
          
     print("Reached the end of the data...")
     sys.exit()
