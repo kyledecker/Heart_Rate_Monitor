@@ -15,6 +15,7 @@ def main():
     filename = args.f
     brady_thresh = args.b
     tachy_thresh = args.t
+    signal_choice = args.s
     print('Analyzing the heart rate of data contained in: %s ...' %filename)
         
     if not args.noshoutout:
@@ -25,7 +26,7 @@ def main():
     # First attain necessary info (fs and size) from data
     num_modalities = 2 # ECG and PP
     init_time = 10 # 10 second initial read
-    conversion = 60 # 60 seconds in 1 minute
+    conversion = 60 # 60 seconds in 1 minute`
     data_info = read_binary(filename,offset=0,count_read=1,init_flag=1)
     file_size = data_info[0]
     fs = data_info[1]
@@ -61,7 +62,7 @@ def main():
         buffer = buffer + num_samples*sample_size
 
         # Take in defined time of ECG and PP data at a time, estimate inst. HR
-        inst_HR =  est_hr(ECG_data,PP_data,delta_t = (1/fs))
+        inst_HR =  est_hr(ECG_data,PP_data,(1/fs),signal_choice)
 
         # Check for too high / too low heart rate
         HR_proc_data = proc_hr(inst_HR,HR_proc_data,brady_thresh,tachy_thresh)

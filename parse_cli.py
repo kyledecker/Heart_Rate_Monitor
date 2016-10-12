@@ -25,6 +25,13 @@ def parse_cli():
                      type=int,
                      default=240)
 
+    par.add_argument("--sig",
+                     dest="s",
+                     help="Choice of signal for Heart Rate Estimation (1 = ECG only, 2 = PP only, 3 = both",
+                     type=int,
+                     default=3)
+
+
     par.add_argument("--shoutout",
                      dest="shoutout",
                      help="shoutout message",
