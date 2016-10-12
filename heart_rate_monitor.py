@@ -1,6 +1,5 @@
-
-if __name__ == "__main__":
     
+def main():
 
     import numpy as np
     import time
@@ -10,18 +9,24 @@ if __name__ == "__main__":
     from read_binary import read_binary
     from est_hr import est_hr
     from proc_hr import proc_hr
-
-    if (len(sys.argv)<2):
-        print('Please specify a filename')
-        sys.exit()
-    else:
-        filename = sys.argv[1]
-        print('Analyzing the heart rate of data contained in: %s ...' %filename)
+    from parse_cli import parse_cli
+    
+    args = parse_cli()
+    filename = args.f
+    brady_thresh = args.b
+    tachy_thresh = args.t
+    signal_choice = args.s
+    print('Analyzing the heart rate of data contained in: %s ...' %filename)
         
+    if not args.noshoutout:
+        shoutout = args.shoutout
+    else:
+        shoutout = ""
+
     # First attain necessary info (fs and size) from data
     num_modalities = 2 # ECG and PP
     init_time = 10 # 10 second initial read
-    conversion = 60 # 60 seconds in 1 minute
+    conversion = 60 # 60 seconds in 1 minute`
     data_info = read_binary(filename,offset=0,count_read=1,init_flag=1)
     file_size = data_info[0]
     fs = data_info[1]
@@ -57,10 +62,10 @@ if __name__ == "__main__":
         buffer = buffer + num_samples*sample_size
 
         # Take in defined time of ECG and PP data at a time, estimate inst. HR
-        inst_HR =  est_hr(ECG_data,PP_data,delta_t = (1/fs))
+        inst_HR =  est_hr(ECG_data,PP_data,(1/fs),signal_choice)
 
         # Check for too high / too low heart rate
-        HR_proc_data = proc_hr(inst_HR,HR_proc_data)
+        HR_proc_data = proc_hr(inst_HR,HR_proc_data,brady_thresh,tachy_thresh)
         # Get 1 minute average
         HR_avg_1min = np.mean(HR_proc_data[0:int(1*conversion/time_var)])
         #Get 5 minute average
@@ -81,6 +86,10 @@ if __name__ == "__main__":
             print("1 Minute Average Heart Rate = %d bpm" % HR_avg_1min)
             if (total_elapsed_time>(5*conversion)):
                 print("5 Minute Average Heart Rate = %d bpm" % HR_avg_5min)
-            
-print("Reached the end of the data...")
-sys.exit()
+         
+    print("Reached the end of the data...")
+    sys.exit()
+
+
+if __name__ == "__main__":
+    main()
