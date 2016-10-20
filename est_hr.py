@@ -28,5 +28,10 @@ def est_hr(ECG_data,PP_data,delta_t,signal_choice):
     thresh_val = 0.5
     peak_ind = peakutils.indexes(signal_comb,thres=thresh_val,min_dist = pk_dist)
     peak_separation = np.diff(peak_ind) # Find separation between peak indices
-    inst_HR = (1/(np.mean(peak_separation)*delta_t))*60 # Find Frequency and convert to bpm
+    try:
+        inst_HR = (1/(np.mean(peak_separation)*delta_t))*conversion # Find Frequency and convert to bpm
+    except ZeroDivisionError:
+        print('Appears to be an error in the peak detection...')
+        print('will use previous HR estimate')
+        inst_HR = 0
     return(inst_HR)

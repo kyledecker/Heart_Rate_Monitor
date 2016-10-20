@@ -11,6 +11,7 @@ def read_binary(filename,offset,count_read,init_flag):
 
     import numpy as np
     import os
+    import sys
 
     if (init_flag == 1):
         f = open(filename)
@@ -22,9 +23,14 @@ def read_binary(filename,offset,count_read,init_flag):
         data_info = np.array([file_size,fs])
         return(data_info)
     else:
-        f = open(filename)
-        f.seek(offset,os.SEEK_SET)
-        data = np.fromfile(f,dtype='uint16',count=count_read)
+        try:
+            f = open(filename)
+            f.seek(offset,os.SEEK_SET)
+            data = np.fromfile(f,dtype='uint16',count=count_read)
+        except EOFError:
+            print('Finished processing all data...') 
+            print('Heart Rate Monitor Finished')
+            sys.exit()
         # If any Nan's are present, convert to 0
         data = np.nan_to_num(data)
         return(data)
