@@ -13,6 +13,14 @@ def main():
     
     args = parse_cli()
     filename = args.f
+    # Check to see if valid filename provided
+    try:
+        f_test = open(filename)
+    except FileNotFoundError:
+        print('%s is not a valid input file for data' % filename)
+        print('Please try again with valid input file...')
+        sys.exit()
+
     brady_thresh = args.b
     tachy_thresh = args.t
     signal_choice = args.s
@@ -64,13 +72,21 @@ def main():
 
         # Take in defined time of ECG and PP data at a time, estimate inst. HR
         inst_HR =  est_hr(ECG_data,PP_data,(1/fs),signal_choice)
-
-        # Check for too high / too low heart rate
-        HR_proc_data = proc_hr(inst_HR,HR_proc_data,brady_thresh,tachy_thresh)
+        # If there was error in peak detection, use previous estimate
+        if (inst_HR != 0):
+            # Check for too high / too low heart rate
+            HR_proc_data = proc_hr(inst_HR,HR_proc_data,brady_thresh,tachy_thresh)
+        
         # Get 1st multi-minute average
-        HR_avg_1 = np.mean(HR_proc_data[0:int(avg_times[0]*conversion/time_var)])
-        #Get 2nd multi-minute average
-        HR_avg_2 = np.mean(HR_proc_data[0:int(avg_times[1]*conversion/time_var)])
+        try:
+            HR_avg_1 = np.mean(HR_proc_data[0:int(avg_times[0]*conversion/time_var)])
+        except ValueError:
+            print("Error in Averaging HR")
+        # Get 2nd multi-minute average
+        try:
+            HR_avg_2 = np.mean(HR_proc_data[0:int(avg_times[1]*conversion/time_var)])
+        except ValueError:
+            print("Error in Averaging HR") 
         # Keep track of elapsed time
         elapsed_time = time.time() - start_time
         total_elapsed_time = total_elapsed_time + elapsed_time
