@@ -11,7 +11,8 @@ def test_proc_hr():
     inst_HR = 65
     brady_thresh = 30
     tachy_thresh = 240
-    HR_proc_data_new = proc_hr(inst_HR,HR_proc_data,brady_thresh,tachy_thresh)
+    plt_flag = 1
+    HR_proc_data_new = proc_hr(inst_HR,HR_proc_data,brady_thresh,tachy_thresh,plt_flag)
     assert np.array_equal(HR_proc_data_new,[65,70,71,72,73])
 
 
@@ -20,7 +21,8 @@ def test_proc_hr():
     inst_HR = 15
     brady_thresh = 30
     tachy_thresh = 240
-    HR_proc_data_new = proc_hr(inst_HR,HR_proc_data,brady_thresh,tachy_thresh)
+    plt_flag = 0
+    HR_proc_data_new = proc_hr(inst_HR,HR_proc_data,brady_thresh,tachy_thresh,plt_flag)
     assert np.array_equal(HR_proc_data_new,[15,70,71,72,73])
     assert (os.path.isfile('ALARM.txt')==True)
     os.system("rm ALARM.txt")

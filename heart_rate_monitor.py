@@ -25,6 +25,7 @@ def main():
     tachy_thresh = args.t
     signal_choice = args.s
     avg_times = args.a
+    plt_flag = args.p
     print('Analyzing the heart rate of data contained in: %s ...' %filename)
         
     if not args.noshoutout:
@@ -75,7 +76,7 @@ def main():
         # If there was error in peak detection, use previous estimate
         if (inst_HR != 0):
             # Check for too high / too low heart rate
-            HR_proc_data = proc_hr(inst_HR,HR_proc_data,brady_thresh,tachy_thresh)
+            HR_proc_data = proc_hr(inst_HR,HR_proc_data,brady_thresh,tachy_thresh,plt_flag)
         
         # Get 1st multi-minute average
         try:

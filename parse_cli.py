@@ -38,6 +38,11 @@ def parse_cli():
                      nargs="+",
                      default=[1,5])
 
+    par.add_argument("--plt",
+                     dest="p",
+                     help="Flag to plot 10 minute trace during alarm (1 = yes, 0 = no)",
+                     type=int,
+                     default=1)
 
     par.add_argument("--shoutout",
                      dest="shoutout",
