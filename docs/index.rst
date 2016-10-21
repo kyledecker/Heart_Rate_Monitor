@@ -11,7 +11,12 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   heart_rate_monitor.rst
+   parse_cli.rst
    read_binary.rst
+   read_mat.rst
+   read_hdf5.rst
+   read_any_data.rst
    est_hr.rst
    proc_hr.rst
 
