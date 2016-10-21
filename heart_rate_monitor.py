@@ -38,7 +38,7 @@ def main():
     # First attain necessary info (fs and size) from data
     num_modalities = 2 # ECG and PP
     init_time = 10 # 10 second initial read
-    conversion = 60 # 60 seconds in 1 minute`
+    conversion = 60 # 60 seconds in 1 minute
     data_info = read_any_data(filename,offset=0,count_read=1,init_flag=1)
     file_size = data_info[0]
     fs = data_info[1]
