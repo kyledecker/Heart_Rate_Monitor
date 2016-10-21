@@ -11,6 +11,7 @@ def est_hr(ECG_data,PP_data,delta_t,signal_choice):
     import numpy as np
     import peakutils
     from scipy import signal
+    import matplotlib.pyplot as plt
     
     # Predefined variable
     max_HR = 400
@@ -25,9 +26,11 @@ def est_hr(ECG_data,PP_data,delta_t,signal_choice):
     if (signal_choice == 3):
         signal_comb = ECG_data*PP_data
     signal_comb.astype(int)
+        
     thresh_val = 0.5
     peak_ind = peakutils.indexes(signal_comb,thres=thresh_val,min_dist = pk_dist)
     peak_separation = np.diff(peak_ind) # Find separation between peak indices
+    #print(peak_separation)
     try:
         inst_HR = (1/(np.mean(peak_separation)*delta_t))*conversion # Find Frequency and convert to bpm
     except ZeroDivisionError:
