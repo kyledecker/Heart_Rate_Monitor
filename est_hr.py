@@ -12,6 +12,7 @@ def est_hr(ECG_data,PP_data,delta_t,signal_choice):
     import peakutils
     from scipy import signal
     import matplotlib.pyplot as plt
+    import logging
     
     # Predefined variable
     max_HR = 400
@@ -20,10 +21,13 @@ def est_hr(ECG_data,PP_data,delta_t,signal_choice):
     # Find the peaks using a percentile threshold and min_dist
     pk_dist = (conversion/max_HR)/delta_t# Define the min distance between peaks - HR will not go over 400 bpm
     if (signal_choice == 1):
+        logging.debug('Estimating HR from ECG data only')
         signal_comb = ECG_data
     if (signal_choice == 2):
+        logging.debug('Estimating HR from PP data only')
         signal_comb = PP_data
     if (signal_choice == 3):
+        logging.debug('Estimating HR from combo of ECG + PP data')
         signal_comb = ECG_data*PP_data
     signal_comb.astype(int)
         
@@ -34,6 +38,7 @@ def est_hr(ECG_data,PP_data,delta_t,signal_choice):
     try:
         inst_HR = (1/(np.mean(peak_separation)*delta_t))*conversion # Find Frequency and convert to bpm
     except ZeroDivisionError:
+        logging.error('Error in peak detection of HR')
         print('Appears to be an error in the peak detection...')
         print('will use previous HR estimate')
         inst_HR = 0

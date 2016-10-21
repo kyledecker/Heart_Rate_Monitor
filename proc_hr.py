@@ -12,8 +12,10 @@ def proc_hr(inst_HR,HR_proc_data,brady_thresh,tachy_thresh,plt_flag):
     import numpy as np
     import matplotlib.pyplot as plt
     import os
+    import logging
 
     # Roll the data by one point and replace the first element (replacing oldest sample w/ new)
+    logging.debug('Updating boxcar average of HR')
     HR_proc_data = np.roll(HR_proc_data,1)
     HR_proc_data[0] = inst_HR
     
@@ -24,6 +26,7 @@ def proc_hr(inst_HR,HR_proc_data,brady_thresh,tachy_thresh,plt_flag):
 
     # Check for tachycardia
     if (inst_HR > tachy_limit):
+        logging.error('Tachycardia ALARM!')
         print("ALARM: Subject is in state of Tachycardia with heart rate of %d bpm" % (inst_HR))
         time_index = np.linspace(0,trace_time,len(HR_proc_data))
         if (plt_flag != 0):
@@ -36,6 +39,7 @@ def proc_hr(inst_HR,HR_proc_data,brady_thresh,tachy_thresh,plt_flag):
 
     # Check for bradycardia
     if (inst_HR < brady_limit):
+        logging.error('Bradycardia ALARM!')
         print("ALARM: Subject is in state of Bradycardia with heart rate of %d bpm" % (inst_HR))
         time_index = np.linspace(0,trace_time,len(HR_proc_data))
         if (plt_flag != 0):

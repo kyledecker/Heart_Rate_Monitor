@@ -6,28 +6,37 @@ def main():
     import sys
     import math
     import os
+    import logging
     from read_binary import read_binary
     from read_mat import read_mat
     from est_hr import est_hr
     from proc_hr import proc_hr
     from parse_cli import parse_cli
     from read_any_data import read_any_data
-    
+
+
     args = parse_cli()
     filename = args.f
-    # Check to see if valid filename provided
-    try:
-        f_test = open(filename)
-    except FileNotFoundError:
-        print('%s is not a valid input file for data' % filename)
-        print('Please try again with valid input file...')
-        sys.exit()
-
     brady_thresh = args.b
     tachy_thresh = args.t
     signal_choice = args.s
     avg_times = args.a
     plt_flag = args.p
+    log_level = args.l
+    
+    # Initialize Log
+    logging.basicConfig(filename="log.txt", format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level = log_level)     
+
+    # Check to see if valid filename provided
+    try:
+        f_test = open(filename)
+    except FileNotFoundError:
+        logging.error('%s is not a valid input file for data',filename)
+        print('%s is not a valid input file for data' % filename)
+        print('Please try again with valid input file...')
+        sys.exit()
+
+
     print('Analyzing the heart rate of data contained in: %s ...' %filename)
         
     if not args.noshoutout:
@@ -76,6 +85,7 @@ def main():
 
         # Take in defined time of ECG and PP data at a time, estimate inst. HR
         inst_HR =  est_hr(ECG_data[0:len(start_data)],PP_data[0:len(start_data)],(1/fs),signal_choice)
+        logging.info('Instant HR estimate: %d bpm',inst_HR)
         # If there was error in peak detection, use previous estimate
         if (inst_HR != 0):
             # Check for too high / too low heart rate
@@ -85,11 +95,13 @@ def main():
         try:
             HR_avg_1 = np.mean(HR_proc_data[0:int(avg_times[0]*conversion/time_var)])
         except ValueError:
+            logging.error('ValueError in HR_avg_1')
             print("Error in Averaging HR")
         # Get 2nd multi-minute average
         try:
             HR_avg_2 = np.mean(HR_proc_data[0:int(avg_times[1]*conversion/time_var)])
         except ValueError:
+            logging.error('ValueError in HR_avg_2')
             print("Error in Averaging HR") 
         # Keep track of elapsed time
         elapsed_time = time.time() - start_time
@@ -105,8 +117,10 @@ def main():
         print("Current Heart Rate = %d bpm" % inst_HR)
         if (total_elapsed_time>(1*conversion)):
             print("%d Minute Average Heart Rate = %d bpm" % (avg_times[0],HR_avg_1))
+            logging.info('%d Minute Average HR estimate: %d bpm',avg_times[0],HR_avg_1)
             if (total_elapsed_time>(5*conversion)):
                 print("%d Minute Average Heart Rate = %d bpm" % (avg_times[1],HR_avg_2))
+                logging.info('%d Minute Average HR estimate: %d bpm',avg_times[1],HR_avg_2)
          
     print("Reached the end of the data...")
     sys.exit()

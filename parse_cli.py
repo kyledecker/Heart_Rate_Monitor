@@ -44,6 +44,12 @@ def parse_cli():
                      type=int,
                      default=1)
 
+    par.add_argument("--log",
+                     dest="l",
+                     help="Logging Level",
+                     default='DEBUG')
+
+
     par.add_argument("--shoutout",
                      dest="shoutout",
                      help="shoutout message",
