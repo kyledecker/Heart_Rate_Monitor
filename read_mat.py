@@ -13,11 +13,12 @@ def read_mat(filename,offset,count_read,init_flag):
     import os
     import sys
     from scipy.io import loadmat
-    import matplotlib.pyplot as plt
+    import logging
     
     sample_size = 2*2
 
     if (init_flag == 1):
+        logging.debug('Reading matlab file with init_flag == 1')
         f = loadmat(filename)
         # Read in the frequency in Hz
         fs = np.squeeze(f['fs'])
@@ -28,6 +29,7 @@ def read_mat(filename,offset,count_read,init_flag):
         data_info = np.array([file_size,fs])
         return(data_info)
     else:
+        logging.debug('Reading matlab file with init_flag == 0')
         # Adjust the offset
         offset = int(offset/sample_size)
         try:
@@ -43,6 +45,7 @@ def read_mat(filename,offset,count_read,init_flag):
             #plt.plot(ecg)
             #plt.show(block=True)
         except EOFError:
+            logging.error('Reached end of input file, can not read another block')
             print('Finished processing all data...') 
             print('Heart Rate Monitor Finished')
             sys.exit()

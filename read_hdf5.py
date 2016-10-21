@@ -13,10 +13,12 @@ def read_hdf5(filename,offset,count_read,init_flag):
     import os
     import sys
     import h5py
+    import logging
     
     sample_size = 2*2
 
     if (init_flag == 1):
+        logging.debug('Reading hdf5 file with init_flag == 1')
         f = h5py.File(filename)
         # Read in the frequency in Hz
         fs = np.squeeze(np.array(f.get('fs')))
@@ -27,6 +29,7 @@ def read_hdf5(filename,offset,count_read,init_flag):
         data_info = np.array([file_size,fs])
         return(data_info)
     else:
+        logging.debug('Reading hdf5 file with init_flag == 0')
         # Adjust the offset
         offset = int(offset/sample_size)
         try:
@@ -42,6 +45,7 @@ def read_hdf5(filename,offset,count_read,init_flag):
             #plt.plot(ecg)
             #plt.show(block=True)
         except EOFError:
+            logging.error('Reached end of input file, can not read another block')
             print('Finished processing all data...') 
             print('Heart Rate Monitor Finished')
             sys.exit()

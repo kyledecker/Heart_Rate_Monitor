@@ -12,8 +12,10 @@ def read_binary(filename,offset,count_read,init_flag):
     import numpy as np
     import os
     import sys
+    import logging
 
     if (init_flag == 1):
+        logging.debug('Reading Binary data with init_flag == 1')
         f = open(filename)
         # Read in the first number which is the frequency in Hz
         tmp = np.fromfile(f,dtype='uint16',count=count_read)
@@ -23,11 +25,13 @@ def read_binary(filename,offset,count_read,init_flag):
         data_info = np.array([file_size,fs])
         return(data_info)
     else:
+        logging.debug('Reading Binary data with init_flag == 0')
         try:
             f = open(filename)
             f.seek(offset,os.SEEK_SET)
             data = np.fromfile(f,dtype='uint16',count=count_read)
         except EOFError:
+            logging.error('Reached end of input file, can not read another block')
             print('Finished processing all data...') 
             print('Heart Rate Monitor Finished')
             sys.exit()
