@@ -1,7 +1,7 @@
 def parse_cli():
-    """parse CLI                                                                                                                                                                                                  
-                                                                                                                                                                                                                  
-    :returns: args                                                                                                                                                                                                
+    """parse CLI
+
+    :returns: args
     """
     import argparse as ap
 
@@ -27,7 +27,8 @@ def parse_cli():
 
     par.add_argument("--sig",
                      dest="s",
-                     help="Choice of signal for Heart Rate Estimation (1 = ECG only, 2 = PP only, 3 = both",
+                     help="Choice of signal for Heart Rate Estimation "
+                          "(1 = ECG only, 2 = PP only, 3 = both",
                      type=int,
                      default=3)
 
@@ -36,11 +37,12 @@ def parse_cli():
                      help="Duration of multi-minute HR avergaes",
                      type=int,
                      nargs="+",
-                     default=[1,5])
+                     default=[1, 5])
 
     par.add_argument("--plt",
                      dest="p",
-                     help="Flag to plot 10 minute trace during alarm (1 = yes, 0 = no)",
+                     help="Flag to plot 10 minute trace during alarm "
+                          "(1 = yes, 0 = no)",
                      type=int,
                      default=1)
 
@@ -48,7 +50,6 @@ def parse_cli():
                      dest="l",
                      help="Logging Level",
                      default='DEBUG')
-
 
     par.add_argument("--shoutout",
                      dest="shoutout",

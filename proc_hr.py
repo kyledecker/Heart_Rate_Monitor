@@ -1,4 +1,4 @@
-def proc_hr(inst_HR,HR_proc_data,brady_thresh,tachy_thresh,plt_flag):
+def proc_hr(inst_HR, HR_proc_data, brady_thresh, tachy_thresh, plt_flag):
     """ Estimate HR from ECG and PP data
 
     :param inst_HR: inst HR estimated for given time interval
@@ -6,7 +6,7 @@ def proc_hr(inst_HR,HR_proc_data,brady_thresh,tachy_thresh,plt_flag):
     :param brady_thresh: Threshold for Bradycardia
     :param tachy_thresh: Threshold for Tachycardia
     :param plt_flag: Flag to plot trace (1) or not (0)
-    :returns: HP_proc_data, return the data with new timepoint added, oldest dropped
+    :returns: HP_proc_data, the data with new timepoint added, oldest dropped
     """
 
     import numpy as np
@@ -14,11 +14,11 @@ def proc_hr(inst_HR,HR_proc_data,brady_thresh,tachy_thresh,plt_flag):
     import os
     import logging
 
-    # Roll the data by one point and replace the first element (replacing oldest sample w/ new)
+    # Roll the data by one point and replace the oldest with newest
     logging.debug('Updating boxcar average of HR')
-    HR_proc_data = np.roll(HR_proc_data,1)
+    HR_proc_data = np.roll(HR_proc_data, 1)
     HR_proc_data[0] = inst_HR
-    
+
     # Predefined variables
     trace_time = 10
     tachy_limit = tachy_thresh
@@ -27,27 +27,33 @@ def proc_hr(inst_HR,HR_proc_data,brady_thresh,tachy_thresh,plt_flag):
     # Check for tachycardia
     if (inst_HR > tachy_limit):
         logging.error('Tachycardia ALARM!')
-        print("ALARM: Subject is in state of Tachycardia with heart rate of %d bpm" % (inst_HR))
-        time_index = np.linspace(0,trace_time,len(HR_proc_data))
+        print("ALARM: Subject is in state of Tachycardia with heart rate of %d"
+              "bpm" % (inst_HR))
+        time_index = np.linspace(0, trace_time, len(HR_proc_data))
         if (plt_flag != 0):
-            plt.plot(time_index,HR_proc_data[::-1]) # Plot data (flip order to make sense)
+            # Plot data (flip order to make sense)
+            plt.plot(time_index, HR_proc_data[::-1])
             plt.title("10 Minute Trace of Heart Rate")
             plt.xlabel("Time (minutes)")
             plt.ylabel("Heart Rate (BPM)")
             plt.show(block=True)
-        os.system("echo 'An Alarm was triggered indicating tachycardia' > ALARM.txt")
+        os.system("echo 'An Alarm was triggered indicating tachycardia' >"
+                  " ALARM.txt")
 
     # Check for bradycardia
     if (inst_HR < brady_limit):
         logging.error('Bradycardia ALARM!')
-        print("ALARM: Subject is in state of Bradycardia with heart rate of %d bpm" % (inst_HR))
-        time_index = np.linspace(0,trace_time,len(HR_proc_data))
+        print("ALARM: Subject is in state of Bradycardia with heart rate of "
+              "%d bpm" % (inst_HR))
+        time_index = np.linspace(0, trace_time, len(HR_proc_data))
         if (plt_flag != 0):
-            plt.plot(time_index,HR_proc_data[::-1]) # Plot data (flip order to make sense)
+            # Plot data (flip order to make sense)
+            plt.plot(time_index, HR_proc_data[::-1])
             plt.title("10 Minute Trace of Heart Rate")
             plt.xlabel("Time (minutes)")
             plt.ylabel("Heart Rate (BPM)")
             plt.show(block=True)
-        os.system("echo 'An Alarm was triggered indicating bradycardia' > ALARM.txt")
-    
+        os.system("echo 'An Alarm was triggered indicating bradycardia' > "
+                  "ALARM.txt")
+
     return(HR_proc_data)

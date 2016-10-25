@@ -1,4 +1,4 @@
-def read_binary(filename,offset,count_read,init_flag):
+def read_binary(filename, offset, count_read, init_flag):
     """ read in raw data from binary file
 
     :param filename: name of binary file
@@ -18,21 +18,22 @@ def read_binary(filename,offset,count_read,init_flag):
         logging.debug('Reading Binary data with init_flag == 1')
         f = open(filename)
         # Read in the first number which is the frequency in Hz
-        tmp = np.fromfile(f,dtype='uint16',count=count_read)
+        tmp = np.fromfile(f, dtype='uint16', count=count_read)
         fs = tmp[0]
         # Determine the file size in bytes (1 byte = 8 bits)
         file_size = os.path.getsize(filename)
-        data_info = np.array([file_size,fs])
+        data_info = np.array([file_size, fs])
         return(data_info)
     else:
         logging.debug('Reading Binary data with init_flag == 0')
         try:
             f = open(filename)
-            f.seek(offset,os.SEEK_SET)
-            data = np.fromfile(f,dtype='uint16',count=count_read)
+            f.seek(offset, os.SEEK_SET)
+            data = np.fromfile(f, dtype='uint16', count=count_read)
         except EOFError:
-            logging.error('Reached end of input file, can not read another block')
-            print('Finished processing all data...') 
+            logging.error('Reached end of input file, can not read another '
+                          'block')
+            print('Finished processing all data...')
             print('Heart Rate Monitor Finished')
             sys.exit()
         # If any Nan's are present, convert to 0

@@ -1,4 +1,4 @@
-def read_any_data(filename,offset,count_read,init_flag):
+def read_any_data(filename, offset, count_read, init_flag):
     """ read in raw data from binary, matlab, or hdf5 file
 
     :param filename: name of file
@@ -15,15 +15,12 @@ def read_any_data(filename,offset,count_read,init_flag):
 
     if (filename.endswith('.bin')):
         logging.info('Found the file type to be Binary!')
-        data = read_binary(filename,offset,count_read,init_flag)
+        data = read_binary(filename, offset, count_read, init_flag)
     else:
         try:
-            data = read_mat(filename,offset,count_read,init_flag)
+            data = read_mat(filename, offset, count_read, init_flag)
             logging.info('Found the file type to be Matlab!')
         except NotImplementedError:
-            data = read_hdf5(filename,offset,count_read,init_flag)
+            data = read_hdf5(filename, offset, count_read, init_flag)
             logging.info('Found the file type to be HDF5!')
     return(data)
-    
-    
-    
